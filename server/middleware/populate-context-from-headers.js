@@ -30,11 +30,10 @@ function setContextValue(callContext, key, valueobj) {
 module.exports = function (options) {
   excludeHeadersList = options.excludeHeadersList || [];
   queryStringContext = options.queryStringContext || [];
-  
-  return function (req, res, next) {
 
+  return function (req, res, next) {
     var headerKeys = Object.keys(req.headers);
-    var callContext = {ctx : {}};
+    var callContext = {ctx: {}};
 
     headerKeys.map(function headerKeysmapFn(key, index) {
       if (excludeHeadersList.indexOf(key) === -1) {
@@ -56,13 +55,12 @@ module.exports = function (options) {
       callContext.ctx.lang = req.headers[langKey].split(',')[0];
     }
 
-    if(!req.callContext){
+    if (!req.callContext) {
       req.callContext = callContext;
-    }
-    else{
+    } else {
       req.callContext = util.mergeObjects(req.callContext, callContext);
     }
     return next();
   };
-}
+};
 
