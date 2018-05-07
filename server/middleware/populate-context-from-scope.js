@@ -9,7 +9,10 @@ var util = require('oe-cloud/lib/common/util');
 module.exports = function (option) {
   return function (req, res, next) {
     if (req.query && req.query.filter) {
-      var t = JSON.parse(req.query.filter);
+      var t=req.query.filter;
+      if (typeof req.query.filter === 'string'){
+          t = JSON.parse(req.query.filter);
+      }
       if (t.scope) {
         req.callContext = util.mergeObjects(req.callContext, { ctx: t.scope });
       }
