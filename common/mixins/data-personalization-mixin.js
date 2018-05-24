@@ -549,7 +549,9 @@ var calculateUnique = function calcUniqFn(modelProp, resultData) {
 
   // Filter out the redundent records from result by applying unique validation.
   if (uniq.length > 0) {
-    resultData = _.uniqWith(resultData, value => uniq.map(u => value[u]).join('-'));
+    // resultData = _.uniqWith(resultData, value => uniq.map(u => value[u]).join('-'));
+    // when using lodash 4.x
+    resultData = _.uniqWith(resultData, function (value1, value2) { return uniq.map(u => value1[u]).join('-') === uniq.map(u => value2[u]).join('-') });
     // resultData = _.intersection.apply(this, _.chain(uniq).map(function (v) { return _.uniq(resultData, v) }).value());
   }
 
