@@ -1,4 +1,4 @@
-﻿/**
+/**
  *
  * ©2018-2019 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
  * Bangalore, India. All Rights Reserved.
@@ -44,7 +44,7 @@
 const mergeQuery = require('loopback-datasource-juggler/lib/utils').mergeQuery;
 const _ = require('lodash');
 const log = require('oe-logger')('data-personalization-mixin');
-
+log.info('OE Personalization Loaded');
 module.exports = Model => {
   if (Model.modelName === 'BaseEntity') {
     return;
@@ -190,7 +190,8 @@ function dataPersonalizationBeforeSave(ctx, next) {
 
   data._scope = convertToKeyValueString(scope);
 
-  next();
+  return next();
+
 }
 
 /**
@@ -287,7 +288,7 @@ function dataPersonalizationAccess(ctx, next) {
         const msOrParams = [];
         const value = scopeVars[key];
         // Filter for removing ignorelist values from scopeVars values.
-        if (!(_.contains(ignoreList, key))) {
+        if (!(_.includes(ignoreList, key))) {
           let regEx;
           if (Array.isArray(value)) {
             if (value.length) {
@@ -549,8 +550,7 @@ var calculateUnique = function calcUniqFn(modelProp, resultData) {
 
   // Filter out the redundent records from result by applying unique validation.
   if (uniq.length > 0) {
-    // resultData = _.uniqWith(resultData, value => uniq.map(u => value[u]).join('-'));
-    // when using lodash 4.x
+    //resultData = _.uniqWith(resultData, value => uniq.map(u => value[u]).join('-'));
     resultData = _.uniqWith(resultData, function (value1, value2) { return uniq.map(u => value1[u]).join('-') === uniq.map(u => value2[u]).join('-') });
     // resultData = _.intersection.apply(this, _.chain(uniq).map(function (v) { return _.uniq(resultData, v) }).value());
   }
