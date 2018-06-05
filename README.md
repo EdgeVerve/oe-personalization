@@ -4,6 +4,8 @@ This module allows to personalize records.
 
 ## dependency
 * oe-cloud
+* oe-logger
+
 
 
 
