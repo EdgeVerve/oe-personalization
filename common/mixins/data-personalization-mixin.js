@@ -235,8 +235,13 @@ function dataPersonalizationAccess(ctx, next) {
   context = convertToLowerCase(context);
   const dataSourceName = ctx.Model.dataSource.connector.name;
   const dataSourceTypes = ['mongodb', 'postgresql', 'oracle'];
-
-  if (_.isEmpty(context) && (dataSourceName !== 'memory' && dataSourceName !== 'mongodb' )) {
+  var scopeVars = context;
+  for (var v in scopeVars) {
+    if (!scopeVars[v]) {
+      delete scopeVars[v];
+    }
+  }
+  if (_.isEmpty(scopeVars) && (dataSourceName !== 'memory' && dataSourceName !== 'mongodb')) {
     mergeQuery(ctx.query, {
       where: { _scope: null }
     });
@@ -245,7 +250,6 @@ function dataPersonalizationAccess(ctx, next) {
   }
   // adding manual scope to ctx for use in cache
   ctx.hookState.scopeVars = Object.assign({}, context);
-  var scopeVars = context;
 
   const andParams = [];
 
@@ -283,7 +287,7 @@ function dataPersonalizationAccess(ctx, next) {
       };
     } else {
       finalQuery = {
-        where: { _scope: { contains: exeContextArray } }
+        where: { or: [{ _scope: { contains: exeContextArray } }, { _scope: null }] }
       };
     }
   } else {

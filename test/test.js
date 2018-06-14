@@ -51,7 +51,6 @@ describe(chalk.blue('Data Personalization Test Started'), function (done) {
   it('t1 getting default record with no scope', function (done) {
     Label.find({}, {}, function (err, results) {
       expect(results[0].value).to.equal('Country');
-      expect(results[0].scope).to.be.undefined;
       return done(err);
     });
   });
@@ -294,6 +293,19 @@ describe(chalk.blue('Data Personalization Test Started'), function (done) {
     });
   });
 
+
+  //it('t24 trying to modify record updateAttributes - should create new record', function (done) {
+  //  Label.find({ where: {key : "country"}}, {ctx:{ lang : "yyy" }}, function (err, results) {
+  //    expect(results.length).to.equal(1);
+  //    expect(results[0].value).to.be.equal("Country");
+  //    var rcd = results[0];
+  //    rcd.updateAttributes({ value : "Country-yyy", id: rcd.id }, { ctx: { lang : "yyy" } }, function (err, result) {
+  //      console.log(err);
+  //      expect(rcd.id).to.not.equal(result.id);
+  //      return done();
+  //    });
+  //  });
+  //});
 
 });
 
