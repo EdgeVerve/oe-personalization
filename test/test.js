@@ -249,7 +249,7 @@ describe(chalk.blue('Data Personalization Test Started'), function (done) {
     });
   });
 
-  it('t19 getting default record with no scope for metadata model', function (done) {
+  it('t19 getting default record with no scope for metadata model for memory connector', function (done) {
     MetaData.find({}, {}, function (err, results) {
       expect(results[0].value).to.equal('Country');
       expect(results[0].scope).to.be.undefined;
@@ -259,21 +259,21 @@ describe(chalk.blue('Data Personalization Test Started'), function (done) {
 
 
 
-  it('t20 getting record for lang=eng-us', function (done) {
+  it('t20 getting record for lang=eng-us for memory connector', function (done) {
     MetaData.find({}, { ctx: { lang: "en-us" } }, function (err, results) {
       expect(results[0].value).to.equal('Country-US');
       return done(err);
     });
   });
 
-  it('t21 getting record for lang=fr', function (done) {
+  it('t21 getting record for lang=fr for memory connector', function (done) {
     MetaData.find({}, { ctx: { lang: "fr" } }, function (err, results) {
       expect(results[0].value).to.equal('Country-FR');
       return done(err);
     });
   });
   var metaurl = basePath + "/MetaDatas";
-  it('t22 getting record for lang=eng-us over HTTP REST API', function (done) {
+  it('t22 getting record for lang=eng-us over HTTP REST API for memory connector', function (done) {
     api.set('Accept', 'application/json')
     .set('accept-language', 'en-US')
     .get(metaurl)
@@ -283,7 +283,7 @@ describe(chalk.blue('Data Personalization Test Started'), function (done) {
       done();
     });
   });
-  it('t23 getting default record by not passing language us over HTTP REST API', function (done) {
+  it('t23 getting default record by not passing language us over HTTP REST API for memory connector', function (done) {
     api.set('Accept', 'application/json')
     .set('accept-language', '')
     .get(metaurl)
