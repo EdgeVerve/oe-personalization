@@ -18,6 +18,9 @@ function setContextValue(callContext, key, valueobj) {
     callContext.evproxyContext = JSON.parse(str);
   } else if (key.indexOf('x-ctx-weight-') === 0) {
     newkey = newkey.replace('x-ctx-weight-', '');
+    if (!callContext.ctxWeights) {
+      callContext.ctxWeights = {};
+    }
     callContext.ctxWeights[camelCase(newkey)] = valueobj[key];
   } else if (key.indexOf('x-') === 0) {
     newkey = newkey.replace('x-', '');

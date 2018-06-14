@@ -1,0 +1,20 @@
+{
+  "name": "MetaData",
+  "plural": "MetaDatas",
+  "base": "BaseEntity",
+  "idInjection": true,
+  "properties": {
+    "key": {
+      "type": "string",
+      "unique": true
+    },
+    "value": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
+

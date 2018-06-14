@@ -187,11 +187,11 @@ function dataPersonalizationBeforeSave(ctx, next) {
   if (callContext.useScopeAsIs) {
     return next();
   }
-
-  data._scope = convertToKeyValueString(scope);
+  if (_.isEmpty(scope)) {
+    // data._scope = ["none:none"];
+  } else {data._scope = convertToKeyValueString(scope);}
 
   return next();
-
 }
 
 /**
@@ -233,7 +233,14 @@ function dataPersonalizationAccess(ctx, next) {
 
   // Convert contextContributors to lowercase.
   context = convertToLowerCase(context);
-
+  // if (_.isEmpty(context)) {
+  //  mergeQuery(ctx.query, {
+  //    where: 
+  //      {_scope: null}
+  //  });
+  //  log.debug(ctx.options, 'Final formed query', ctx.query);
+  //  return next();
+  // }
   // adding manual scope to ctx for use in cache
   ctx.hookState.scopeVars = Object.assign({}, context);
   var scopeVars = context;
@@ -266,6 +273,7 @@ function dataPersonalizationAccess(ctx, next) {
   const dataSourceTypes = ['mongodb', 'postgresql', 'oracle'];
   if (dataSourceTypes.indexOf(dataSourceName) !== -1) {
     let exeContextArray = convertToKeyValueString(scopeVars);
+
     if (callContext['whereKeys' + ctx.Model.modelName]) {
       exeContextArray = exeContextArray.concat(callContext['whereKeys' + ctx.Model.modelName]);
     }
@@ -325,7 +333,7 @@ function dataPersonalizationAccess(ctx, next) {
           }
         }
       });
-
+      // manualAnd.push("none:none");
       andParams.push({
         and: manualAnd
       });
@@ -425,7 +433,7 @@ function dataPersonalizationAfterAccess(ctx, next) {
 
       Object.keys(callContext.ctx).forEach((key) => {
         const value = callContext.ctx[key];
-        if (!(_.contains(ignoreList, key))) {
+        if (!(_.includes(ignoreList, key))) {
           scope[key] = value;
         }
       });
@@ -457,7 +465,7 @@ function dataPersonalizationAfterAccess(ctx, next) {
 
     // Sort in descending order based on score .
     // Lodash v4.6.1
-    resultData = _.orderBy(resultData, ['score', 'weight'], ['desc', 'desc']);
+    resultData = _.orderBy(resultData, ['_score', '_weight'], ['desc', 'desc']);
     // Lodash v3.10.1
     // resultData = _.sortByOrder(resultData, ['_score', '_weight'], ['desc', 'desc']);
     resultData.forEach((obj) => {
@@ -550,8 +558,8 @@ var calculateUnique = function calcUniqFn(modelProp, resultData) {
 
   // Filter out the redundent records from result by applying unique validation.
   if (uniq.length > 0) {
-    //resultData = _.uniqWith(resultData, value => uniq.map(u => value[u]).join('-'));
-    resultData = _.uniqWith(resultData, function (value1, value2) { return uniq.map(u => value1[u]).join('-') === uniq.map(u => value2[u]).join('-') });
+    // resultData = _.uniqWith(resultData, value => uniq.map(u => value[u]).join('-'));
+    resultData = _.uniqWith(resultData, function (value1, value2) { return uniq.map(u => value1[u]).join('-') === uniq.map(u => value2[u]).join('-'); });
     // resultData = _.intersection.apply(this, _.chain(uniq).map(function (v) { return _.uniq(resultData, v) }).value());
   }
 

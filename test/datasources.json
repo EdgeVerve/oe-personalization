@@ -1,0 +1,21 @@
+{
+  "memdb": {
+    "name": "memdb",
+    "connector": "memory"
+  },
+  "transient": {
+    "name": "transient",
+    "connector": "transient"
+  },
+  "db": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "mongodb://localhost:27017/oe-personalization-test",
+    "database": "oe-personalization-test",
+    "password": "admin",
+    "name": "db",
+    "connector": "mongodb",
+    "user": "admin",
+    "connectionTimeout": 500000
+  }
+}
