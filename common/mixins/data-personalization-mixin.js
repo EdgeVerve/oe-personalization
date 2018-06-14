@@ -235,7 +235,7 @@ function dataPersonalizationAccess(ctx, next) {
   context = convertToLowerCase(context);
   // if (_.isEmpty(context)) {
   //  mergeQuery(ctx.query, {
-  //    where: 
+  //    where:
   //      {_scope: null}
   //  });
   //  log.debug(ctx.options, 'Final formed query', ctx.query);
