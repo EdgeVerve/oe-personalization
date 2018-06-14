@@ -233,14 +233,16 @@ function dataPersonalizationAccess(ctx, next) {
 
   // Convert contextContributors to lowercase.
   context = convertToLowerCase(context);
-  // if (_.isEmpty(context)) {
-  //  mergeQuery(ctx.query, {
-  //    where:
-  //      {_scope: null}
-  //  });
-  //  log.debug(ctx.options, 'Final formed query', ctx.query);
-  //  return next();
-  // }
+  const dataSourceName = ctx.Model.dataSource.connector.name;
+  const dataSourceTypes = ['mongodb', 'postgresql', 'oracle'];
+
+  if (_.isEmpty(context) && (dataSourceName !== 'memory' && dataSourceName !== 'mongodb' )) {
+    mergeQuery(ctx.query, {
+      where: { _scope: null }
+    });
+    log.debug(ctx.options, 'Final formed query', ctx.query);
+    return next();
+  }
   // adding manual scope to ctx for use in cache
   ctx.hookState.scopeVars = Object.assign({}, context);
   var scopeVars = context;
@@ -269,8 +271,6 @@ function dataPersonalizationAccess(ctx, next) {
   // If callContext.defaults is false then query is formwed with manual scope parameters.
   // If callContext.defaults is true then query will be not be formed with manual scope parameters.
   let finalQuery = {};
-  const dataSourceName = ctx.Model.dataSource.connector.name;
-  const dataSourceTypes = ['mongodb', 'postgresql', 'oracle'];
   if (dataSourceTypes.indexOf(dataSourceName) !== -1) {
     let exeContextArray = convertToKeyValueString(scopeVars);
 
