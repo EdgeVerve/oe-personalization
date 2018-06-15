@@ -375,7 +375,6 @@ function dataPersonalizationAfterAccess(ctx, next) {
   if (modelSettings.mixins.DataPersonalizationMixin === false) {
     return next();
   }
-
   if (ctx.options && ctx.options.fetchAllScopes) {
     return next();
   }
