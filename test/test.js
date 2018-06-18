@@ -353,7 +353,6 @@ describe(chalk.blue('Data Personalization Test Started'), function (done) {
   });
   var metaurl = basePath + "/MetaDatas";
   it('t32 getting record for lang=eng-us over HTTP REST API for memory connector', function (done) {
-    debugger;
     api.set('Accept', 'application/json')
     .set('accept-language', 'en-US')
     .get(metaurl)
@@ -447,7 +446,7 @@ describe(chalk.blue('Data Personalization Test Started'), function (done) {
     });
   });
 
-  it('t42-1 getting record based on context and context weight - language has heigher weight', function (done) {
+  it('t42-1 getting record based on context and context weight - language has heigher weight - for memory connector', function (done) {
     api.set('Accept', 'application/json')
      .set('accept-language', 'xxx')
     .set('device', 'mobile')
@@ -461,7 +460,7 @@ describe(chalk.blue('Data Personalization Test Started'), function (done) {
     });
   });
 
-  it('t42-2 getting record based on context and context weight - device has heigher weight', function (done) {
+  it('t42-2 getting record based on context and context weight - device has heigher weight - for memory connector', function (done) {
     api.set('Accept', 'application/json')
      .set('accept-language', 'xxx')
     .set('device', 'mobile')
@@ -503,19 +502,223 @@ describe(chalk.blue('Data Personalization Test Started'), function (done) {
     });
   });
 
+  it('t43-1 Preparing models for update test cases', function (done) {
+    MetaData.destroyAll({}, { fetchAllScopes: true }, function (err) {
+      if (err) {
+        return done(err);
+      }
+      Label.destroyAll({}, { fetchAllScopes: true }, function (err) {
+        return done(err);
+      })
+    });
+  });
 
-  //it('t24 trying to modify record updateAttributes - should create new record', function (done) {
-  //  Label.find({ where: {key : "country"}}, {ctx:{ lang : "yyy" }}, function (err, results) {
-  //    expect(results.length).to.equal(1);
-  //    expect(results[0].value).to.be.equal("Country");
-  //    var rcd = results[0];
-  //    rcd.updateAttributes({ value : "Country-yyy", id: rcd.id }, { ctx: { lang : "yyy" } }, function (err, result) {
-  //      console.log(err);
-  //      expect(rcd.id).to.not.equal(result.id);
-  //      return done();
-  //    });
-  //  });
-  //});
+  it('t43-1 Preparing models for update test cases', function (done) {
+    MetaData.destroyAll({}, { fetchAllScopes: true }, function (err) {
+      if (err) {
+        return done(err);
+      }
+      Label.destroyAll({}, { fetchAllScopes: true }, function (err) {
+        return done(err);
+      })
+    });
+  });
+
+
+  it('t43-2 create fresh records for lang=xxx and device (more than one context)over HTTP REST API', function (done) {
+    var url2 = url + '?access_token=' + infyToken;
+    api.set('Accept', 'application/json')
+    .post(url2)
+    .send([{ key: "ssn", value: "Social Security Number" },
+          { key: "aadhar", value: "AAdhar Card" }
+    ])
+    .end(function (err, response) {
+      var result = response.body;
+      expect(result.length).to.be.equal(2);
+      done();
+    });
+  });
+
+  it('t43-3 create fresh records for lang=xxx and device (more than one context)over HTTP REST API - for memory connector', function (done) {
+    var url2 = metaurl + '?access_token=' + infyToken;
+    api.set('Accept', 'application/json')
+    .post(url2)
+    .send([{ key: "ssn", value: "Social Security Number" },
+          { key: "aadhar", value: "AAdhar Card" }
+    ])
+    .end(function (err, response) {
+      var result = response.body;
+      expect(result.length).to.be.equal(2);
+      done();
+    });
+  });
+
+  it('t44-1 - trying to modify record updateAttributes - should create new record', function (done) {
+    Label.find({ where: {key : "ssn"}}, {ctx:{ device : "mobile" }}, function (err, results) {
+      expect(results.length).to.equal(1);
+      expect(results[0].value).to.be.equal("Social Security Number");
+      var rcd = results[0];
+      rcd.updateAttributes({ value: "SSN", id: rcd.id, scope: {device : "mobile"} }, {}, function (err, result) {
+        expect(result.value).to.equal("SSN");
+        expect(rcd.id.toString()).to.not.equal(result.id.toString());
+        Label.find({ where: { key: "ssn" } }, { ctx: { device: "mobile" } }, function (err, results) {
+          expect(results.length).to.equal(1);
+          expect(results[0].value).to.be.equal("SSN");
+          return done(err);
+        });
+      });
+    });
+  });
+
+  it('t44-2 trying to modify record replacebyid - should create new record', function (done) {
+    Label.find({ where: { key: "ssn" } }, { ctx: { lang: "xxx" } }, function (err, results) {
+      expect(results.length).to.equal(1);
+      expect(results[0].value).to.be.equal("Social Security Number");
+      var rcd = results[0];
+      Label.replaceById(rcd.id, { value: "SSN-xxx", id: rcd.id, key: "ssn", scope: { lang: "xxx" } }, {}, function (err, result) {
+        expect(rcd.id.toString()).to.not.equal(result.id.toString());
+        expect(result.value).to.equal("SSN-xxx");
+        Label.find({ where: { key: "ssn" } }, { ctx: { lang: "xxx" } }, function (err, results) {
+          expect(results.length).to.equal(1);
+          expect(results[0].value).to.be.equal("SSN-xxx");
+          return done(err);
+        });
+      });
+    });
+  });
+
+
+  it('t44-3 trying to modify record replaceOrCreate - should create new record', function (done) {
+    Label.find({ where: { key: "ssn" } }, { ctx: { lang: "yyy" } }, function (err, results) {
+      expect(results.length).to.equal(1);
+      expect(results[0].value).to.be.equal("Social Security Number");
+      var rcd = results[0];
+      Label.replaceOrCreate({value: "SSN-yyy", id: rcd.id, key: "ssn", scope: { lang: "yyy" } }, {}, function (err, result) {
+        expect(rcd.id.toString()).to.not.equal(result.id.toString());
+        expect(result.value).to.equal("SSN-yyy");
+        return done();
+      });
+    });
+  });
+
+  it('t44-4 trying to modify record replaceOrCreate - should update existing record as scope is matching', function (done) {
+    Label.find({ where: { key: "ssn" } }, { ctx: { lang: "yyy" } }, function (err, results) {
+      expect(results.length).to.equal(1);
+      expect(results[0].value).to.be.equal("SSN-yyy");
+      var rcd = results[0];
+      Label.replaceOrCreate({ value: "SSN-yyyyyy", id: rcd.id, key: "ssn", scope: { lang: "yyy" } }, {}, function (err, result) {
+        expect(rcd.id.toString()).to.equal(result.id.toString());
+        expect(result.value).to.equal("SSN-yyyyyy");
+        Label.find({ where: { key: "ssn" } }, { ctx: { lang: "yyy" } }, function (err, results) {
+          expect(results.length).to.equal(1);
+          expect(results[0].value).to.be.equal("SSN-yyyyyy");
+          return done(err);
+        });
+      });
+    });
+  });
+ 
+  it('t44-5 trying to modify record upsert - should update existing record as scope is matching', function (done) {
+    Label.find({ where: { key: "ssn" } }, { ctx: { lang: "yyy" } }, function (err, results) {
+      expect(results.length).to.equal(1);
+      expect(results[0].value).to.be.equal("SSN-yyyyyy");
+      var rcd = results[0];
+      Label.upsert({ value: "SSN-modified for yyy", id: rcd.id, key : "ssn", scope: { lang: "yyy" } }, {}, function (err, result) {
+        expect(rcd.id.toString()).to.equal(result.id.toString());
+        expect(result.value).to.equal("SSN-modified for yyy");
+        Label.find({ where: { key: "ssn" } }, { ctx: { lang: "yyy" } }, function (err, results) {
+          expect(results.length).to.equal(1);
+          expect(results[0].value).to.be.equal("SSN-modified for yyy");
+          return done(err);
+        });
+      });
+    });
+  });
+
+
+  it('t45-1 - trying to modify record updateAttributes - should create new record (on memory connector)', function (done) {
+    MetaData.find({ where: { key: "ssn" } }, { ctx: { device: "mobile" } }, function (err, results) {
+      expect(results.length).to.equal(1);
+      expect(results[0].value).to.be.equal("Social Security Number");
+      var rcd = results[0];
+      rcd.updateAttributes({ value: "SSN", id: rcd.id, scope: { device: "mobile" } }, {}, function (err, result) {
+        expect(result.value).to.equal("SSN");
+        expect(rcd.id.toString()).to.not.equal(result.id.toString());
+        MetaData.find({ where: { key: "ssn" } }, { ctx: { device: "mobile" } }, function (err, results) {
+          expect(results.length).to.equal(1);
+          expect(results[0].value).to.be.equal("SSN");
+          return done(err);
+        });
+      });
+    });
+  });
+
+  it('t45-2 trying to modify record replacebyid - should create new record (on memory connector)', function (done) {
+    MetaData.find({ where: { key: "ssn" } }, { ctx: { lang: "xxx" } }, function (err, results) {
+      expect(results.length).to.equal(1);
+      expect(results[0].value).to.be.equal("Social Security Number");
+      var rcd = results[0];
+      MetaData.replaceById(rcd.id, { value: "SSN-xxx", id: rcd.id, key: "ssn", scope: { lang: "xxx" } }, {}, function (err, result) {
+        expect(rcd.id.toString()).to.not.equal(result.id.toString());
+        expect(result.value).to.equal("SSN-xxx");
+        MetaData.find({ where: { key: "ssn" } }, { ctx: { lang: "xxx" } }, function (err, results) {
+          expect(results.length).to.equal(1);
+          expect(results[0].value).to.be.equal("SSN-xxx");
+          return done(err);
+        });
+      });
+    });
+  });
+
+
+  it('t45-3 trying to modify record replaceOrCreate - should create new record (on memory connector)', function (done) {
+    MetaData.find({ where: { key: "ssn" } }, { ctx: { lang: "yyy" } }, function (err, results) {
+      expect(results.length).to.equal(1);
+      expect(results[0].value).to.be.equal("Social Security Number");
+      var rcd = results[0];
+      MetaData.replaceOrCreate({ value: "SSN-yyy", id: rcd.id, key: "ssn", scope: { lang: "yyy" } }, {}, function (err, result) {
+        expect(rcd.id.toString()).to.not.equal(result.id.toString());
+        expect(result.value).to.equal("SSN-yyy");
+        return done();
+      });
+    });
+  });
+
+  it('t45-4 trying to modify record replaceOrCreate - should update existing record as scope is matching (on memory connector)', function (done) {
+    MetaData.find({ where: { key: "ssn" } }, { ctx: { lang: "yyy" } }, function (err, results) {
+      expect(results.length).to.equal(1);
+      expect(results[0].value).to.be.equal("SSN-yyy");
+      var rcd = results[0];
+      MetaData.replaceOrCreate({ value: "SSN-yyyyyy", id: rcd.id, key: "ssn", scope: { lang: "yyy" } }, {}, function (err, result) {
+        expect(rcd.id.toString()).to.equal(result.id.toString());
+        expect(result.value).to.equal("SSN-yyyyyy");
+        MetaData.find({ where: { key: "ssn" } }, { ctx: { lang: "yyy" } }, function (err, results) {
+          expect(results.length).to.equal(1);
+          expect(results[0].value).to.be.equal("SSN-yyyyyy");
+          return done(err);
+        });
+      });
+    });
+  });
+
+  it('t45-5 trying to modify record upsert - should update existing record as scope is matching (on memory connector)', function (done) {
+    MetaData.find({ where: { key: "ssn" } }, { ctx: { lang: "yyy" } }, function (err, results) {
+      expect(results.length).to.equal(1);
+      expect(results[0].value).to.be.equal("SSN-yyyyyy");
+      var rcd = results[0];
+      MetaData.upsert({ value: "SSN-modified for yyy", id: rcd.id, key: "ssn", scope: { lang: "yyy" } }, {}, function (err, result) {
+        expect(rcd.id.toString()).to.equal(result.id.toString());
+        expect(result.value).to.equal("SSN-modified for yyy");
+        MetaData.find({ where: { key: "ssn" } }, { ctx: { lang: "yyy" } }, function (err, results) {
+          expect(results.length).to.equal(1);
+          expect(results[0].value).to.be.equal("SSN-modified for yyy");
+          return done(err);
+        });
+      });
+    });
+  });
+
+
 
 });
 
