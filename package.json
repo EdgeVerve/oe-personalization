@@ -19,8 +19,7 @@
     "camelcase": "^3.0.0",
     "lodash": "4.17.10",
     "oe-expression": "git+http://evgit/atul/oe-expression.git#master",
-    "oe-cloud": "git+http://evgit/atul/oe-cloud.git#master",
-    "oe-personalization": "git+http://evgit/atul/oe-personalization.git#master"
+    "oe-cloud": "git+http://evgit/atul/oe-cloud.git#master"
   },
   "devDependencies": {
     "jshint": "^2.5.6",
