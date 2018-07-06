@@ -128,7 +128,7 @@ describe(chalk.blue('Data Personalization Test Started'), function (done) {
     .send([{ username: "admin", password: "admin", email: "admin@admin.com" },
     { username: "evuser", password: "evuser", email: "evuser@evuser.com" },
     { username: "infyuser", password: "infyuser", email: "infyuser@infyuser.com" },
-    { username: "bpouser", password: "bpouser", email: "infyuser@infyuser.com" }])
+    { username: "bpouser", password: "bpouser", email: "bpouser@bpouser.com" }])
     .end(function (err, response) {
       var result = response.body;
       expect(result[0].id).to.be.defined;
