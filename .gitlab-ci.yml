@@ -1,7 +1,6 @@
 stages:
   - pre-build
   - pre-build-test
-  - cleanup
 
 image: $REGISTRY/evfoundation-executor-docker13:node8alpine36
 
@@ -100,9 +99,3 @@ oracletest:
   tags:
     - CEP_RUNNER_EE    
 
-lastcleanup:
-  stage: cleanup
-  script:
-    - echo "Finishing CI CD"
-  tags:
-    - CEP_RUNNER_EE
