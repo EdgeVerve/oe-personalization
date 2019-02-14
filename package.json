@@ -37,7 +37,7 @@
     "istanbul": "0.4.5",
     "loopback-connector-mongodb": "^3.4.2",
     "mocha": "5.2.0",
-    "oe-cloud": "git+http://evgit/oec-next/oe-cloud.git",
+    "oe-cloud": "git+http://evgit/oec-next/oe-cloud.git#master",
     "oe-connector-postgresql": "git+http://evgit/oec-next/oe-connector-postgresql.git#master",
     "superagent-defaults": "0.1.14",
     "supertest": "3.4.2"
