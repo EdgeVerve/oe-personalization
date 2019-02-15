@@ -18,6 +18,7 @@
     "lodash": "4.17.11"
   },
   "devDependencies": {
+    "async": "2.6.1",
     "babel-eslint": "7.2.3",
     "chai": "3.4.1",
     "chai-datetime": "1.4.0",
@@ -34,17 +35,17 @@
     "grunt-mocha-istanbul": "5.0.2",
     "grunt-mocha-test": "0.13.3",
     "istanbul": "0.4.5",
+    "loopback-connector-mongodb": "^3.4.2",
     "mocha": "5.2.0",
+    "oe-cloud": "git+http://evgit/oec-next/oe-cloud.git#master",
+    "oe-connector-postgresql": "git+http://evgit/oec-next/oe-connector-postgresql.git#master",
     "superagent-defaults": "0.1.14",
-    "supertest": "3.4.2",
-    "loopback-connector-mongodb": "3.4.2",
-    "oe-cloud": "git+http://evgit/oec-next/oe-cloud.git",
-    "oe-connector-postgresql": "git+http://evgit/oec-next/oe-connector-postgresql.git#master"
+    "supertest": "3.4.2"
   },
   "repository": {
     "type": "git",
     "url": "git@evgit:oec-next/oe-personalization.git"
   },
-  "author" : "Atul Pandit <atul_pandit@infosys.com>",
+  "author": "Atul Pandit <atul_pandit@infosys.com>",
   "license": "MIT"
 }
