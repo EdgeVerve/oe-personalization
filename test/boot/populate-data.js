@@ -4,85 +4,84 @@ module.exports = function (app, done) {
   var Label = loopback.findModel('Label');
   Label.destroyAll({}, { fetchAllScopes: true }, function (err) {
     var item0 = {
-      key: "country",
-      value: "Country"
+      key: 'country',
+      value: 'Country'
     };
     var item1 = {
-      key: "country",
-      value: "Country-US",
+      key: 'country',
+      value: 'Country-US',
       scope: {
-        lang : "en-us"
+        lang: 'en-us'
       }
     };
     var item2 = {
-      key: "country",
-      value: "Country-FR",
+      key: 'country',
+      value: 'Country-FR',
       scope: {
-        lang: "fr"
+        lang: 'fr'
       }
     };
     var item3 = {
-      key: "country",
-      value: "Country-IT",
+      key: 'country',
+      value: 'Country-IT',
       scope: {
-        lang: "it"
+        lang: 'it'
       }
     };
     var item4 = {
-      key: "country",
-      value: "Country-HI",
+      key: 'country',
+      value: 'Country-HI',
       scope: {
-        lang: "hi"
+        lang: 'hi'
       }
     };
     var item5 = {
-      key: "country",
-      value: "Country-CN",
+      key: 'country',
+      value: 'Country-CN',
       scope: {
-        lang: "cn"
+        lang: 'cn'
       }
     };
     Label.create([item0, item1, item2, item3, item4, item5], {}, function (err, r) {
-
       var MetaData = loopback.findModel('MetaData');
       MetaData.destroyAll({}, { fetchAllScopes: true }, function (err) {
         var item0 = {
-          key: "country",
-          value: "Country"
+          key: 'country',
+          value: 'Country'
         };
         var item1 = {
-          key: "country",
-          value: "Country-US",
+          key: 'country',
+          value: 'Country-US',
           scope: {
-            lang: "en-us"
+            lang: 'en-us'
           }
         };
         var item2 = {
-          key: "country",
-          value: "Country-FR",
+          key: 'country',
+          value: 'Country-FR',
           scope: {
-            lang: "fr"
+            lang: 'fr'
           }
         };
         var item3 = {
-          key: "country",
-          value: "Country-IT",
+          key: 'country',
+          value: 'Country-IT',
           scope: {
-            lang: "it"
+            lang: 'it'
           }
         };
         var item4 = {
-          key: "country",
-          value: "Country-HI",
+          key: 'country',
+          value: 'Country-HI',
           scope: {
-            lang: "hi"
+            lang: 'hi'
           }
         };
         var item5 = {
-          key: "country",
-          value: "Country-CN",
+          key: 'country',
+          value: 'Country-CN',
           scope: {
-            lang: "cn"
+            lang: 'cn'
           }
         };
         MetaData.create([item0, item1, item2, item3, item4, item5], {}, function (err, r) {
@@ -91,5 +90,5 @@ module.exports = function (app, done) {
       });
     });
   });
-}
+};
 
