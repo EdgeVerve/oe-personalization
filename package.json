@@ -1,6 +1,6 @@
 {
   "name": "oe-personalization",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "oe-cloud modularization project aka oecloud.io",
   "engines": {
     "node": ">=6"
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "camelcase": "5.0.0",
-    "lodash": "4.17.14"
+    "lodash": "4.17.20"
   },
   "devDependencies": {
     "async": "2.6.1",
